@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Message;
 use Illuminate\Http\Request;
+use App\Events\NewMessage;
+use Inertia\Inertia;
+
 
 class ChatController extends Controller
 {
@@ -12,7 +15,10 @@ class ChatController extends Controller
      */
     public function index()
     {
-        //
+        $messages = Message::with(['user', 'room'])->orderBy('created_at', 'desc')->get();
+        return Inertia::render("Chat/Index",[
+            'messages' => $messages
+        ]);
     }
 
     /**
@@ -28,7 +34,24 @@ class ChatController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'message' => 'required',
+            'room_id' => 'required',
+        ]);
+
+        $message = Message::create($validated);
+
+        broadcast(new NewMessage($message))->toOthers();
+        
+        if (request()->wantsJson()) {
+            return response([
+                'message' => $message
+            ]);
+        }
+
+        return redirect()->action(
+            [ChatController::class, 'index']
+        );
     }
 
     /**
