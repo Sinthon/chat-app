@@ -13,13 +13,8 @@ const showingNavigationDropdown = ref(false);
 <template>
     <div>
         <div class="min-h-screen bg-gray-100">
-            <!-- Page Heading -->
-            <header class="bg-white shadow py-2 px-6" v-if="$slots.header">
-                <slot name="header" />
-            </header>
-
             <!-- Page Content -->
-            <main style="height: calc(100vh - 82px);">
+            <main style="height: 100vh;">
                 <slot />
             </main>
         </div>

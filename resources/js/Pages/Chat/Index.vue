@@ -22,27 +22,13 @@ const form = useForm({
 
 const submit = () => {
     form.post(route('chats.store'), {
-        onFinish: () => form.reset('message'),
+        onFinish: (event) => {
+            form.reset('message')
+            console.log(event)
+        },
     });
 };
 
-const data = ref([
-    {
-        'user_id': 1,
-        'name': 'Sinthon Seng',
-        'message': 'Hello guy!'
-    },
-    {
-        'user_id': 2,
-        'name': 'Robot User',
-        'message': 'Hello'
-    },
-    {
-        'user_id': 2,
-        'name': 'Robot User',
-        'message': 'May I help you?'
-    },
-]);
 </script>
 
 <template>
@@ -53,30 +39,35 @@ const data = ref([
             <h2 class="px-3 first-letter:font-semibold my-3 text-xl text-gray-800 leading-tight">Chat</h2>
         </template>
 
-        <div class="h-full bg-white flex flex-col justify-between">
+        <div class="w-screan h-full flex ">
+            <div class="h-full bg-slate-400" style="width: 450px;">
 
-            <div class="flex-none text-xl font-bold text-start p-3 border">
-                General
             </div>
+            <div class="w-full h-full bg-white flex flex-col justify-between">
 
-            <div class="container-snap flex flex-col-reverse grow p-3 h-14 bg-gray-100 overflow-y-scroll">
-                <div class="grid justify-items-stretch" v-for="message in messages">
-                    <div class="border rounded px-2 py-1 my-1 bg-blue-200"
-                        :class="{ 'justify-self-end': true, 'justify-self-start': false }">
-                        {{ message.message }}
+                <div class="flex-none text-xl font-bold text-start p-3 border">
+                    General
+                </div>
+
+                <div class="container-snap flex flex-col-reverse grow p-3 h-14 bg-gray-100 overflow-y-scroll">
+                    <div class="grid justify-items-stretch" v-for="message in messages">
+                        <div class="border rounded px-2 py-1 my-1 bg-blue-400 text-white"
+                            :class="{ 'justify-self-end': true, 'justify-self-start': false }">
+                            {{ message.message }}
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="flex-none p-3 h-auto">
-                <form @submit.prevent="submit">
-                    <div class="w-full relative">
-                        <TextInput id="message" type="text" class="mt-1 block w-full" v-model="form.message" required
-                            autofocus autocomplete="message" aria-placeholder="Test"/>
-                        <InputError class="mt-2" :message="form.errors.message" />
-                        <ButtonSend class="absolute h-full place-self-center right-0 top-0 px-3">Send</ButtonSend>
-                    </div>
-                </form>
+                <div class="flex-none p-3 h-auto">
+                    <form @submit.prevent="submit">
+                        <div class="w-full relative">
+                            <TextInput id="message" type="text" class="mt-1 block w-full" v-model="form.message" required
+                                autofocus autocomplete="message" aria-placeholder="Test" />
+                            <!-- <InputError class="mt-2" :message="form.errors.message" /> -->
+                            <ButtonSend class="absolute h-full place-self-center right-0 top-0 px-3">Send</ButtonSend>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </AuthenticatedLayout>
